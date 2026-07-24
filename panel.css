@@ -74,6 +74,9 @@ h2 { font-size: 1.3rem; }
     font-weight: 600;
     z-index: 5;
 }
+button:focus {
+    outline: none;
+}
 .user-logo {
     width: 45px;
     height: 45px;
@@ -232,6 +235,9 @@ b {
 .producto-info img {
     width: 40px; height: 40px; 
     border-radius: 8px; background-color: var(--bg-gris-claro);
+}
+.btn-editar {
+    display: flex; align-items: center; justify-content: center;
 }
 .stock-control {
     display: flex; align-items: center; justify-content: space-between;

@@ -189,7 +189,7 @@ $(document).ready(function() {
                     </div>                                        
                     <div class="stock-control">
                         <div class="control"><button class="btn-sumar restar" data-id="${p.id}">-</button><p>${p.Cantidad}</p><button class="btn-sumar sumar" data-id="${p.id}">+</button></div>
-                        <div class="action"><button class="btn-eliminar" data-id="${p.id}"><i class="fas fa-trash"></i></button><button class="btn-eliminar check" data-id="${p.id}"><i class="fas fa-check"></i></button></div>
+                        <div class="action"><button class="btn-editar" data-id="${p.id}" style="background-color: #3498db; color: white; border: none; border-radius: 8px; width: 27px; height: 27px;"><i class="fas fa-pen" style="font-size: 0.7rem;"></i></button><button class="btn-eliminar" data-id="${p.id}"><i class="fas fa-trash"></i></button><button class="btn-eliminar check" data-id="${p.id}"><i class="fas fa-check"></i></button></div>
                     </div>
                 </div>
             `);
@@ -380,4 +380,36 @@ $(document).ready(function() {
     });
 
     iN();
+    $(document).on('click', '.btn-editar', async function() {
+    let id = $(this).data('id');
+    let producto = tP.find(x => x.id === id); 
+
+    const { value: nuevoPrecio } = await Swal.fire({
+        title: 'Editar precio',
+        input: 'number',
+        inputLabel: `Precio actual de ${producto.Nombre}: $${producto.Precio}`,
+        inputValue: producto.Precio,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (nuevoPrecio && nuevoPrecio != producto.Precio) {
+        $.ajax({
+            url: `${SU}/rest/v1/Clientes?id=eq.${id}`, 
+            type: 'PATCH',
+            headers: { 
+                'apikey': SK, 
+                'Authorization': `Bearer ${localStorage.getItem('supabase_token')}`, 
+                'Content-Type': 'application/json' 
+            },
+            data: JSON.stringify({ Precio: parseFloat(nuevoPrecio) }),
+            success: () => {
+                producto.Precio = parseFloat(nuevoPrecio);
+                fR();
+                Toast.fire({ icon: 'success', title: 'Precio actualizado' });
+            }
+        });
+    }
+});
 });
