@@ -1,4 +1,6 @@
 let cambiar = true;
+let TELEFONO_WHATSAPP = "";
+
 
 $("#shop-icon").click(function(){
     $("#carrito-compras").animate({width: 'toggle'}); 
@@ -101,10 +103,8 @@ const SLUG_ACTUAL = obtenerSlug();
         if (carrito.length === 0) {
             alert("Tu carrito está vacío.");
             return;
-        }
-
-        
-        const TELEFONO_WHATSAPP = "-"; 
+        }       
+         
         
         let mensaje = "¡Hola! Me gustaría realizar el siguiente pedido:\n\n";
         let total = 0;
@@ -157,7 +157,7 @@ const SLUG_ACTUAL = obtenerSlug();
                 productos.forEach(function(prod) {
                     let estructuraProducto = `
                         <div class="producto">
-                            <img src="${prod.Imagen}" loading="lazy" alt="${prod.Nombre}">
+                            <img src="${prod.Imagen}" alt="${prod.Nombre}">
                             <div class="info-producto">
                                 <h3>${prod.Nombre}</h3>
                                 <p class="precio">$${prod.Precio} - <span>${prod.Etiqueta}</span></p>
