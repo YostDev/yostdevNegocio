@@ -136,6 +136,7 @@ const SLUG_ACTUAL = obtenerSlug();
     });
 
     function cargarProductos() {
+        
         const urlAPI = `${SUPABASE_URL}/rest/v1/${NOMBRE_TABLA}?select=Imagen,Nombre,Precio,Cantidad,Etiqueta&Negocio_id=eq.${NegocioId}`;
 
         $.ajax({
@@ -150,17 +151,22 @@ const SLUG_ACTUAL = obtenerSlug();
                 $('.contenedor-productos').empty();
 
                 if (productos.length === 0) {
-                    $('.contenedor-productos').append('<p class="Aviso">No hay productos disponibles para este negocio.</p>');
+                    $('.contenedor-productos').html('<p class="Aviso">No hay productos disponibles para este negocio.</p>');
                     return;
-                }
+                }                
 
                 productos.forEach(function(prod) {
+                    let claseOferta = "";
+                    let textoEtiqueta = prod.Etiqueta ? prod.Etiqueta.toUpperCase() : "";
+                    if (textoEtiqueta.includes("OFF") || textoEtiqueta.includes("OFERTA")) {
+                        claseOferta = "etiqueta-oferta";
+                    }
                     let estructuraProducto = `
                         <div class="producto">
                             <img src="${prod.Imagen}" alt="${prod.Nombre}">
                             <div class="info-producto">
                                 <h3>${prod.Nombre}</h3>
-                                <p class="precio">$${prod.Precio} - <span>${prod.Etiqueta}</span></p>
+                                <p class="precio">$${prod.Precio} - <span class="${claseOferta}">${prod.Etiqueta}</span></p>
                                 <button class="accion">Agregar al carrito</button>
                             </div>
                         </div>

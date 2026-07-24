@@ -581,3 +581,9 @@ button:hover {
     color: #aaa;
     margin: 0;
 }
+.etiqueta-oferta {
+    background-color: #d9675a !important;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    color: white !important;
+}
