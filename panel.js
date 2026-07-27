@@ -69,15 +69,20 @@ function cerrarSesionYRedirigir() {
     window.location.href = `login.html${u.get('negocio') ? '?negocio=' + u.get('negocio') : ''}`;
 }
 
-const p2 = $(".pagina-principal"), p3 = $(".pagina-ticket"), p1 = $(".pagina-estadistica");
-p1.hide(); p2.show(); p3.hide();
+
+const p2 = $(".pagina-principal"), p3 = $(".pagina-ticket"), p1 = $(".pagina-estadistica"), p4 = $(".pagina-notas");
+p1.hide(); p2.show(); p3.hide(); p4.hide();
 
 $(".btn-inicio").click(function(){
     $(".btn-inicio").removeClass("activo"); $(this).addClass("activo");
     let a = $(this).data("accion");
-    if(a == "estadistica"){ p1.show(); p2.hide(); p3.hide(); }
-    else if(a == "inventario"){ p1.hide(); p2.show(); p3.hide(); }
-    else if(a == "ticket"){ p1.hide(); p2.hide(); p3.show(); }
+
+    p1.hide(); p2.hide(); p3.hide(); p4.hide();
+
+    if(a == "estadistica"){ p1.show(); }
+    else if(a == "inventario"){ p2.show(); }
+    else if(a == "ticket"){ p3.show(); }
+    else if(a == "notas"){ p4.show(); cargarNotas(); } // Cargamos las notas al entrar
 });
 
 $(".panel").hide();
@@ -128,7 +133,7 @@ $(document).ready(function() {
                     if(n.logo_url) $('.user-logo, .ticket-logo').attr('src', n.logo_url);
                     if(n.alias) $('.ticket-mp h4').text(n.alias);
                     
-                    lP(); lE();
+                    lP(); lE(); cargarNotas();
                 }
             }
         });
@@ -380,6 +385,94 @@ $(document).ready(function() {
     });
 
     iN();
+
+const Tabla_Notas = 'Notas'; 
+
+function cargarNotas() {
+    if(!nI) return; 
+
+    $.ajax({
+        url: `${SU}/rest/v1/${Tabla_Notas}?select=*&Negocio_id=eq.${nI}&order=fecha.desc`, 
+        type: 'GET',
+        headers: { 'apikey': SK, 'Authorization': `Bearer ${localStorage.getItem('supabase_token')}` },
+        success: notas => {
+            const cont = $('#lista-notas');
+            cont.empty();
+            if(!notas.length) {
+                cont.append('<p style="text-align:center; color:#999; margin-top: 20px;">No tienes pendientes. ¡Todo listo!</p>');
+                return;
+            }
+            notas.forEach(n => {
+                
+                let fechaFormateada = new Date(n.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                
+                cont.append(`
+                    <div class="nota-item pagina-activa">
+                        <div class="nota-contenido">
+                            <h4>${n.titulo}</h4>
+                            <p>${n.texto}</p>
+                            <span class="nota-fecha"><i class="far fa-clock"></i> ${fechaFormateada}</span>
+                        </div>
+                        <button class="btn-eliminar check btn-completar-nota" data-id="${n.id}" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                `);
+            });
+        }
+    });
+}
+
+$('#form-nota').on('submit', function(e) {
+    e.preventDefault();
+    let btn = $('#btn-guardar-nota');
+    btn.prop('disabled', true).text('Guardando...');
+    
+    let nuevaNota = {
+        Negocio_id: nI,
+        titulo: $('#n-titulo').val(),
+        texto: $('#n-texto').val(),
+        fecha: new Date().toISOString() 
+    };
+
+    $.ajax({
+        url: `${SU}/rest/v1/${Tabla_Notas}`, 
+        type: 'POST',
+        headers: { 'apikey': SK, 'Authorization': `Bearer ${localStorage.getItem('supabase_token')}`, 'Content-Type': 'application/json' },
+        data: JSON.stringify(nuevaNota),
+        success: () => {
+            $('#form-nota')[0].reset();
+            btn.prop('disabled', false).text('Añadir Nota');
+            cargarNotas();
+            Toast.fire({ icon: 'success', title: 'Nota añadida' });
+        },
+        error: () => {
+            btn.prop('disabled', false).text('Añadir Nota');
+            Toast.fire({ icon: 'error', title: 'Error al añadir la nota' });
+        }
+    });
+});
+
+$(document).on('click', '.btn-completar-nota', function() {
+    let id = $(this).data('id');
+    let btn = $(this);
+    btn.prop('disabled', true);
+    
+    $.ajax({
+        url: `${SU}/rest/v1/${Tabla_Notas}?id=eq.${id}`, 
+        type: 'DELETE',
+        headers: { 'apikey': SK, 'Authorization': `Bearer ${localStorage.getItem('supabase_token')}` },
+        success: () => { 
+            btn.closest('.nota-item').fadeOut(300, function() { $(this).remove(); });
+            Toast.fire({ icon: 'success', title: '¡Tarea Completada!' });
+        },
+        error: () => {
+            btn.prop('disabled', false);
+            Toast.fire({ icon: 'error', title: 'Error al borrar' });
+        }
+    });
+});
+
     $(document).on('click', '.btn-editar', async function() {
     let id = $(this).data('id');
     let producto = tP.find(x => x.id === id); 
@@ -412,4 +505,6 @@ $(document).ready(function() {
         });
     }
 });
+
+
 });

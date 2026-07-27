@@ -54,11 +54,43 @@ h2 { font-size: 1.3rem; }
     margin: 0 auto;
     width: 100%;
 }
-.pagina-principal, .pagina-ticket, .pagina-estadistica {
+.pagina-principal, .pagina-ticket, .pagina-estadistica, .pagina-notas {
     width: 100%; 
     max-width: 900px;
     margin: 0 auto;
 }
+textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-borde);
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    background-color: var(--bg-blanco);
+}
+textarea:focus { border-color: var(--color-primario); }
+.btn-completar-nota {
+    width: 30px !important; height: 30px !important;
+}
+
+.nota-item {
+    background-color: var(--bg-alerta);
+    border-left: 4px solid var(--borde-alerta);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.nota-contenido { width: 85%; }
+.nota-contenido h4 { margin: 0 0 5px 0; color: var(--texto-oscuro); font-size: 1rem; }
+.nota-contenido p { margin: 0; font-size: 0.85rem; color: var(--texto-medio); }
+.nota-fecha { font-size: 0.7rem; color: var(--texto-claro); margin-top: 8px; display: block; font-weight: bold;}
 
 .header-principal {
     display: flex;

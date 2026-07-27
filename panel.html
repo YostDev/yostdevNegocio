@@ -191,10 +191,41 @@
     <h2 id="stats-total-mes">$ 0</h2>
 </div>
 
+<div class="pagina-notas">
+    <div class="container">
+        <div class="seccion">
+            <div class="header-principal header-p">
+                <h2>Mis Notas</h2>
+                <img src="logo.png" alt="Logo de Usuario" class="user-logo">
+            </div>
+            
+            <form id="form-nota" style="margin-bottom: 25px;">
+                <div class="form-group">
+                    <label for="n-titulo">Nueva tarea / nota</label>
+                    <input type="text" id="n-titulo" required placeholder="Ej. Comprar más bolsas">
+                </div>
+                <div class="form-group">
+                    <textarea id="n-texto" required placeholder="Detalles de la nota..."></textarea>
+                </div>
+                <button type="submit" id="btn-guardar-nota">Añadir Nota</button>
+            </form>
+
+            <h3 style="font-size: 1rem; color: var(--texto-medio); border-bottom: 1px solid var(--color-borde); padding-bottom: 5px;">Pendientes</h3>
+            <div id="lista-notas">
+
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br>
 <div class="button-menu">
     <button class="btn-inicio" data-accion="estadistica">
         <i class="fas fa-chart-line"></i>
         <span>Leads</span>
+    </button>
+    <button class="btn-inicio" data-accion="notas">
+        <i class="fas fa-sticky-note"></i>
+        <span>Notas</span>
     </button>
     <button class="btn-inicio activo" data-accion="inventario">
         <i class="fas fa-house"></i>
