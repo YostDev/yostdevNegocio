@@ -49,7 +49,7 @@ const SLUG_ACTUAL = obtenerSlug();
                         </button>
                     </div>
                 `;
-                $contenedor.append(itemHTML);
+                $contenedor.prepend(itemHTML);
             });
         }
 
