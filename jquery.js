@@ -49,7 +49,7 @@ const SLUG_ACTUAL = obtenerSlug();
                         </button>
                     </div>
                 `;
-                $contenedor.prepend(itemHTML);
+                $contenedor.append(itemHTML);
             });
         }
 
@@ -171,7 +171,7 @@ const SLUG_ACTUAL = obtenerSlug();
                             </div>
                         </div>
                     `;
-                    $('.contenedor-productos').append(estructuraProducto);
+                    $('.contenedor-productos').prepend(estructuraProducto);
                 });
             },
             error: function(error) {
